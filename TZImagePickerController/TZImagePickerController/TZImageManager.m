@@ -323,7 +323,13 @@ static dispatch_once_t onceToken;
             options.version = PHImageRequestOptionsVersionOriginal;
         }
         [[PHImageManager defaultManager] requestImageDataForAsset:model.asset options:options resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
-            if (model.type != TZAssetModelMediaTypeVideo) dataLength += imageData.length;
+            if (model.type != TZAssetModelMediaTypeVideo) {
+                dataLength += imageData.length;
+            } else {
+                PHAssetResource *resource = [[PHAssetResource assetResourcesForAsset:model.asset] firstObject];
+                NSInteger videoLength = [[resource valueForKey:@"fileSize"] integerValue];
+                dataLength += videoLength;
+            }
             assetCount ++;
             if (assetCount >= photos.count) {
                 NSString *bytes = [self getBytesFromDataLength:dataLength];
