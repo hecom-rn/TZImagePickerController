@@ -318,6 +318,10 @@
         if (aspectRatio > 1.5) {
             self.scrollView.maximumZoomScale *= aspectRatio / 1.5;
         }
+        // 优化超长图片的显示
+        else if (aspectRatio < 0.667) {
+            self.scrollView.maximumZoomScale *= 0.667 / aspectRatio;
+        }
     }
 }
 
@@ -567,7 +571,7 @@
 
 #pragma mark - Click Event
 
-- (void)signleTapAction {    
+- (void)signleTapAction {
     if (self.singleTapGestureBlock) {
         self.singleTapGestureBlock();
     }
